@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Gallery from "./Gallery";
+import { Spinner, Alert } from "react-bootstrap";
 
 class FetchingFirstSaga extends Component {
 
@@ -10,7 +11,7 @@ class FetchingFirstSaga extends Component {
     }
 
     fetchFirstSaga = async () => {
-
+        
         const URL= "http://www.omdbapi.com/?s=lord-of-the-rings&type=movie&apikey=d6ef2c43"
         try {
             const resp = await fetch(URL)
@@ -21,7 +22,7 @@ class FetchingFirstSaga extends Component {
             
             console.log(this.state.movies)
         }    else {
-            alert("fetch not possible")
+           this.setState({hasError: true})
         }} catch(err) {
             console.log(err);
         } finally {
@@ -37,8 +38,11 @@ class FetchingFirstSaga extends Component {
     render() {
         return(
            
-               
-                <Gallery arr={this.state.movies}/>
+            <div>
+                 {this.state.hasError && <Alert variant="danger">Riscontrato problema con la</Alert>}
+                {this.state.isLoading && <Spinner animation="border" variant="danger"  />}
+                    <Gallery arr={this.state.movies}/>
+            </div>
         )
         
     }

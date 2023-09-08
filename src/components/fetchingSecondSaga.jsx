@@ -1,9 +1,11 @@
 import { Component } from "react";
 import Gallery from "./Gallery";
-
+import { Spinner, Alert } from "react-bootstrap";
 class FetchingSecondSaga extends Component {
     state = {
-        secondMovie: []
+        secondMovie: [],
+        isLoading: true,
+        hasError: false
     }
 
     fetchSecondSaga = async () => {
@@ -18,9 +20,11 @@ class FetchingSecondSaga extends Component {
             
             console.log(this.state.secondMovie)
         }    else {
-            alert("fetch not possible")
+            this.setState({hasError: true})
         }} catch(err) {
             console.log(err);
+        } finally {
+            this.setState({isLoading: false})
         }
         
     }
@@ -30,7 +34,11 @@ class FetchingSecondSaga extends Component {
 
     render() {
         return (
-            <Gallery arr={this.state.secondMovie}/>
+            <div>
+                {this.state.hasError && <Alert variant="danger">Riscontrato problema con la fetch</Alert>}
+                {this.state.isLoading && <Spinner animation="border" variant="danger"  />}
+                <Gallery arr={this.state.secondMovie}/>
+            </div>
         )
     }
 }
